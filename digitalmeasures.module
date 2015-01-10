@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function digitalmeasures_menu() {
+  $items['digitalmeasures/%'] = array(
+    'title' => 'Digital Measures Profile',
+    'page callback' => '_digitalmeasures_profile_page',
+    'page arguments' => array(1),
+    'access arguments' => array('administer digital measures'),
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function digitalmeasures_permission() {
+  return array(
+    'administer digital measures' =>  array(
+      'title' => t('Administer Digital Measures'),
+      'description' => t('Perform administration tasks for the Digital Measures module.'),
+    ),
+  );
+}
+
+/**
+ * Page callback for hook_menu
+ */
+function _digitalmeasures_profile_page($profile_username) {
+  $url = '/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:' . $profile_username;
+  $response = _digitalmeasures_connect($url);
+  $profile = $response->data;
+
+
+  // ddl($profile);
+  return $profile;
+}
+
+/**
+ * Helper function for connecting to Digital Measures via the drupal_http_request().
+ * $resource_id:  The resource id portion of the url that you are attempting to
+ *                connect to. The base url will be automatically added.
+ * $options:      Options peramter from for the drupal_http_request().
+ */
+function _digitalmeasures_connect($resource_id, $options = NULL) {
+  $base_url = variable_get('digitalmeasures_url', '');
+  $username = variable_get('digitalmeasures_username', '');
+  $password = variable_get('digitalmeasures_password', '');
+
+  // Encode the username and password and set it in the header.
+  $username_password = $username . ':' . $password;
+  $options['headers']['Authorization'] = 'Basic ' . base64_encode($username_password);
+
+  // Add the correct base_url
+  $url = $base_url . $url;
+
+  // Attempt to connect to Digital Measures
+  if ($base_url && $username && $password) {
+    return drupal_http_request($url, $options);
+  }
+  else {
+    watchdog('digitalmeasures', 'Digital Measures is attempting to connect
+      without the proper credentials. Please enter them on the Digital Measures
+      configuration page.', array(), WATCHDOG_ERROR);
+    return 'fail';
+  }
+}

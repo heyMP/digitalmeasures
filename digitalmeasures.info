@@ -1,0 +1,3 @@
+name = Digital Measures
+description = Integration with the Digital Measures platform.
+core = 7.x

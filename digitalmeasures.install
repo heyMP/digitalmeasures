@@ -1,0 +1,10 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function digitalmeasures_install() {
+  variable_set('digitalmeasures_username', '');
+  variable_set('digitalmeasures_password', '');
+  variable_set('digitalmeasures_url', 'https://www.digitalmeasures.com');
+}
