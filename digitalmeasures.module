@@ -30,13 +30,12 @@ function digitalmeasures_permission() {
  * Page callback for hook_menu
  */
 function _digitalmeasures_profile_page($profile_username) {
-  $url = '/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:' . $profile_username;
-  $response = _digitalmeasures_connect($url);
+  $resource_id = '/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:' . $profile_username;
+  $response = _digitalmeasures_connect($resource_id);
   $profile = $response->data;
 
-
-  // ddl($profile);
-  return $profile;
+  ddl($profile);
+  return $response->data;
 }
 
 /**
@@ -55,7 +54,7 @@ function _digitalmeasures_connect($resource_id, $options = NULL) {
   $options['headers']['Authorization'] = 'Basic ' . base64_encode($username_password);
 
   // Add the correct base_url
-  $url = $base_url . $url;
+  $url = $base_url . $resource_id;
 
   // Attempt to connect to Digital Measures
   if ($base_url && $username && $password) {
