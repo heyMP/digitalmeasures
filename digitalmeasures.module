@@ -30,12 +30,22 @@ function digitalmeasures_permission() {
  * Page callback for hook_menu
  */
 function _digitalmeasures_profile_page($profile_username) {
-  $resource_id = '/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:' . $profile_username;
-  $response = _digitalmeasures_connect($resource_id);
-  $profile = _digitalmeasures_xml_to_array($response->data);
+  $profile = digitalmeasures_digitalmeasures_user_profile($profile_username);
 
   dpm($profile);
   return $profile_username;
+}
+
+/**
+ * Public function to retrieve user profile information from Digital Measures.
+ */
+function digitalmeasures_digitalmeasures_user_profile($username) {
+  $resource_id = '/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:' . $username;
+  $response = _digitalmeasures_connect($resource_id);
+  $profile = _digitalmeasures_xml_to_array($response->data);
+
+  ddl($profile);
+  return $profile;
 }
 
 /**
