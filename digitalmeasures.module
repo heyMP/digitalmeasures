@@ -32,10 +32,10 @@ function digitalmeasures_permission() {
 function _digitalmeasures_profile_page($profile_username) {
   $resource_id = '/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:' . $profile_username;
   $response = _digitalmeasures_connect($resource_id);
-  $profile = $response->data;
+  $profile = _digitalmeasures_xml_to_array($response->data);
 
-  ddl($profile);
-  return $response->data;
+  dpm($profile);
+  return $profile_username;
 }
 
 /**
@@ -66,4 +66,15 @@ function _digitalmeasures_connect($resource_id, $options = NULL) {
       configuration page.', array(), WATCHDOG_ERROR);
     return 'fail';
   }
+}
+
+/**
+ * Helper function to convert an xml string to php array.
+ */
+function _digitalmeasures_xml_to_array($xml_string) {
+  $xml = simplexml_load_string($xml_string);
+  $json = drupal_json_encode($xml);
+  $array = drupal_json_decode($json);
+
+  return $array;
 }
