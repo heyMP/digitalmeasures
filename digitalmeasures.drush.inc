@@ -10,14 +10,14 @@
  */
 function digitalmeasures_drush_command() {
   $items = array();
-  $items['user_profile'] = array(
+  $items['user_profiles'] = array(
     'description' => 'Retrieve user profile data from Digital Measures.',
     'aliases' => array('dmup'),
     'arguments' => array(
-      'username' => 'Username of the profile.',
+      'usernames' => 'Comma separated list of usernames.',
     ),
     'examples' => array(
-      'drush dmup mgp140' => 'Retrieve all profile infromation for mgp140.',
+      'drush dmup mgp140,mpr13' => 'Retrieve all profile infromation for mgp140 and mpr13.',
     ),
   );
 
@@ -27,6 +27,7 @@ function digitalmeasures_drush_command() {
 /**
  * digitalmeasures retrieve user profile command.
  */
-function drush_digitalmeasures_user_profile($username) {
-  digitalmeasures_digitalmeasures_user_profile($username);
+function drush_digitalmeasures_user_profiles($usernames) {
+  $usernames = explode(',', $usernames);
+  digitalmeasures_digitalmeasures_user_profiles($usernames);
 }
