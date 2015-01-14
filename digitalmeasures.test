@@ -1,0 +1,60 @@
+<?php
+/**
+ * Creates a test email entry in the Listserv_Verify Table and verifies that the
+ * keys are correctly active and inactive.
+ *
+ * @todo Need create a test for checking the confirmation link was posted.
+ */
+class DigitalMeasuresTestCase extends DrupalWebTestCase {
+
+  /**
+   * Implements getInfo().
+   */
+  public static function getInfo() {
+    return array (
+      'name' => t('Digital Measures'),
+      'description' => t('Functional test for the Digital Measures module.'),
+      'group' => t('Digital Measures'),
+    );
+  }
+
+  public function setUp() {
+    // Enable any module that you will need in your tests.
+    parent::setUp('digitalmeasures');
+  }
+
+  public function createNewRecord($email, $verifykey) {
+    _listserv_verify_record_new_entry($email, $verifykey);
+  }
+
+  public function sendTestEmail($email) {
+    $options = array(
+      'method' => 'POST',
+      'data' => $email,
+    );
+
+    $request = drupal_http_request(url(_listserv_verify_get_listener_url(), array('absolute' => TRUE)), $options);
+    return $request;
+  }
+
+  public function testEmail() {
+    $verifykey = 'b08ee001-7f7a-4652-a2b1-4e0aeecb395f';
+    $confirmationlink = 'http://massmail.psu.edu/cgi-bin/wa?OK=F61E4971&L=L-ITCOMMTEST';
+    $module_path = drupal_get_path('module', 'listserv_verify');
+    $email = file_get_contents($module_path . '/tests/email.txt');
+
+    // Create a new record of the email and verify key in the database;
+    $this->createNewRecord($email, $verifykey);
+
+    // Send out a test email to the verfiy endpoint
+    $email_post = $this->sendTestEmail($email);
+    // Make sure that is says confirmed
+    $this->assertEqual($email_post->data, 'Confirmed');
+
+    // Now lets make sure that the verify key was set to inactive
+    $email_post = $this->sendTestEmail($email);
+    // Make sure that is says Key Not Active
+    $this->assertEqual($email_post->data, 'Key Not Active');
+  }
+}
+
