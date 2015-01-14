@@ -2,12 +2,9 @@ language: php
 
 php:
   - 5.3
-  - hhvm
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - php: hhvm
 
 mysql:
   database: digitalmeasures
@@ -34,7 +31,7 @@ before_script:
 
   # create new site, stubbing sendmail path with true to prevent delivery errors and manually resolving drush path
   - mysql -e 'create database digitalmeasures'
-  - php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php --yes core-quick-drupal --profile=testing --no-server --db-url=mysql://root:@127.0.0.1/digitalmeasures --enable=simpletest digitalmeasures
+  - php -d sendmail_path=`which true` `pear config-get php_dir`/drush/drush.php --yes core-quick-drupal --profile=testing --no-server --db-url=mysql://root:@127.0.0.1/digitalmeasures --enable=simpletest digitalmeasures og_purl
 
   # reference and enable digitalmeasures in build site
   - ln -s $(readlink -e $(cd -)) digitalmeasures/drupal/sites/all/modules/digitalmeasures
