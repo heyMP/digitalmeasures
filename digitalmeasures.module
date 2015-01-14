@@ -40,31 +40,35 @@ function digitalmeasures_permission() {
  *                          'CAMPUS' => 'University Park'
  *                        );
  */
-function digitalmeasures_digitalmeasures_get_schemadata($arguments = array()) {
+function digitalmeasures_digitalmeasures_get_schemadata($arguments = array(), $output = 'php') {
   $resource_id = 'login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University';
   $response = _digitalmeasures_connect($resource_id, $arguments);
-  $response_array = _digitalmeasures_xml_to_array($response->data);
+  if ($output == 'php') {
+    $response = _digitalmeasures_xml_to_array($response->data);
+  }
 
   drush_print_r($response);
   if (module_exists('devel_debug_log')) {
-    ddl($response_array);
+    ddl($response);
   }
-  return $response_array;
+  return $response;
 }
 
 /**
  * Public function to retrieve a list of all indexes and entries.
  */
-function digitalmeasures_digitalmeasures_get_all_indexes() {
+function digitalmeasures_digitalmeasures_get_all_indexes($output = 'php') {
   $resource_id = 'login/service/v4/SchemaIndex/INDIVIDUAL-ACTIVITIES-University';
   $response = _digitalmeasures_connect($resource_id, $arguments);
-  $response_array = _digitalmeasures_xml_to_array($response->data);
+  if ($output == 'php') {
+    $response = _digitalmeasures_xml_to_array($response->data);
+  }
 
   drush_print_r($response);
   if (module_exists('devel_debug_log')) {
-    ddl($response_array);
+    ddl($response);
   }
-  return $response_array;
+  return $response;
 }
 
 /**

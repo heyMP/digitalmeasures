@@ -2,9 +2,6 @@ language: php
 
 php:
   - 5.3
-  - 5.4
-  - 5.5
-  - 5.6
   - hhvm
 
 matrix:
@@ -43,9 +40,11 @@ before_script:
   - ln -s $(readlink -e $(cd -)) digitalmeasures/drupal/sites/all/modules/digitalmeasures
   - cd digitalmeasures/drupal
   - drush --yes pm-enable digitalmeasures
+  - drush vset digitalmeasures_username test -y
+  - drush vset digitalmeasures_password test -y
 
   # start a web server on port 8080, run in the background; wait for initialization
   - drush runserver 127.0.0.1:8080 &
   - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 
-script: drush test-run digitalmeasures,'Digital Measures' --uri=http://127.0.0.1:8080
+script: drush test-run 'Digital Measures' --uri=http://127.0.0.1:8080
