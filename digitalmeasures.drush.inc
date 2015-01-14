@@ -20,6 +20,10 @@ function digitalmeasures_drush_command() {
       'drush dmup mgp140,mpr13' => 'Retrieve all profile infromation for mgp140 and mpr13.',
     ),
   );
+  $items['indexes'] = array(
+    'description' => 'Retrieve retrieve a list of all indexes and entries.',
+    'aliases' => array('dmindex'),
+  );
 
   return $items;
 }
@@ -30,4 +34,8 @@ function digitalmeasures_drush_command() {
 function drush_digitalmeasures_user_profiles($usernames) {
   $usernames = explode(',', $usernames);
   digitalmeasures_digitalmeasures_user_profiles($usernames);
+}
+
+function drush_digitalmeasures_indexes() {
+  digitalmeasures_digitalmeasures_get_all_indexes();
 }

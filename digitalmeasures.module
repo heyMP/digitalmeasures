@@ -13,12 +13,6 @@ function digitalmeasures_menu() {
     'page arguments' => array('digitalmeasures_admin_config_form'),
     'file' => 'digitalmeasures.admin.inc',
   );
-  $items['digitalmeasures/%'] = array(
-    'title' => 'Digital Measures Profile',
-    'page callback' => '_digitalmeasures_profile_page',
-    'page arguments' => array(1),
-    'access arguments' => array('administer digital measures'),
-  );
 
   return $items;
 }
@@ -36,22 +30,24 @@ function digitalmeasures_permission() {
 }
 
 /**
- * Page callback for hook_menu
- */
-function _digitalmeasures_profile_page($usernames) {
-  $usernames = explode(',', $usernames);
-  $profile = digitalmeasures_digitalmeasures_user_profiles($usernames);
-
-  dpm($profile);
-  return $profile;
-}
-
-/**
  * Public function to retrieve user profile information from Digital Measures.
  */
 function digitalmeasures_digitalmeasures_user_profiles($usernames = array()) {
+  $resource_id = 'login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University';
   $arguments['USERNAME'] = $usernames;
-  $response = _digitalmeasures_connect($arguments);
+  $response = _digitalmeasures_connect($resource_id, $arguments);
+  $profiles = _digitalmeasures_xml_to_array($response->data);
+
+  ddl($profiles);
+  return $profiles;
+}
+
+/**
+ * Public function to retrieve a list of all indexes and entries.
+ */
+function digitalmeasures_digitalmeasures_get_all_indexes() {
+  $resource_id = 'login/service/v4/SchemaIndex/INDIVIDUAL-ACTIVITIES-University';
+  $response = _digitalmeasures_connect($resource_id);
   $profiles = _digitalmeasures_xml_to_array($response->data);
 
   ddl($profiles);
@@ -62,9 +58,10 @@ function digitalmeasures_digitalmeasures_user_profiles($usernames = array()) {
  * Helper function for connecting to Digital Measures via the drupal_http_request().
  * $arguments:    An array of options that are keyed by optional SchemaKey and
  *                whos nested array is a list of IndexKeyEntryKeys.
+ * $resource_id:  The resource endpoint in Digital Measures.
  * $options:      Options peramter from for the drupal_http_request().
  */
-function _digitalmeasures_connect($arguments = array(), $options = NULL) {
+function _digitalmeasures_connect($resource_id = '', $arguments = array(), $options = NULL) {
   $base_url = variable_get('digitalmeasures_url', '');
   $username = variable_get('digitalmeasures_username', '');
   $password = variable_get('digitalmeasures_password', '');
@@ -75,7 +72,7 @@ function _digitalmeasures_connect($arguments = array(), $options = NULL) {
   $options['headers']['Authorization'] = 'Basic ' . base64_encode($username_password);
 
   // Add the correct base_url
-  $url = $base_url . '/' . $arguments;
+  $url = $base_url . '/' . $resource_id . '/' . $arguments;
 
   // Attempt to connect to Digital Measures
   if ($base_url && $username && $password) {
