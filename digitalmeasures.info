@@ -4,5 +4,3 @@ core = 7.x
 package = Digital Measures
 
 configure = admin/config/services/digitalmeasures
-
-dependencies[] = devel_debug_log
