@@ -31,15 +31,23 @@ function digitalmeasures_permission() {
 
 /**
  * Public function to retrieve user profile information from Digital Measures.
+ *
+ * $arguments    An array of index keys to search on where the key of array is
+ *               the 'indexKey' and the value is the 'entryKey' that you want
+ *               to search on.
+ *               Example: array(
+ *                          'USERNAME' => 'mgp140',
+ *                          'CAMPUS' => 'University Park'
+ *                        );
  */
-function digitalmeasures_digitalmeasures_user_profiles($usernames = array()) {
+function digitalmeasures_digitalmeasures_get_schemadata($arguments = array()) {
   $resource_id = 'login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University';
-  $arguments['USERNAME'] = $usernames;
   $response = _digitalmeasures_connect($resource_id, $arguments);
-  $profiles = _digitalmeasures_xml_to_array($response->data);
+  $response_array = _digitalmeasures_xml_to_array($response->data);
 
-  ddl($profiles);
-  return $profiles;
+  drush_print_r($response);
+  ddl($response_array);
+  return $response_array;
 }
 
 /**
@@ -47,11 +55,12 @@ function digitalmeasures_digitalmeasures_user_profiles($usernames = array()) {
  */
 function digitalmeasures_digitalmeasures_get_all_indexes() {
   $resource_id = 'login/service/v4/SchemaIndex/INDIVIDUAL-ACTIVITIES-University';
-  $response = _digitalmeasures_connect($resource_id);
-  $profiles = _digitalmeasures_xml_to_array($response->data);
+  $response = _digitalmeasures_connect($resource_id, $arguments);
+  $response_array = _digitalmeasures_xml_to_array($response->data);
 
-  ddl($profiles);
-  return $profiles;
+  drush_print_r($response);
+  ddl($response_array);
+  return $response_array;
 }
 
 /**
@@ -97,6 +106,10 @@ function _digitalmeasures_argument_array_to_string($arguments) {
       $arguments_string .= $index_entry_key . ':' . $index_key_entry_key . ',';
     }
   }
+  // Remove trailing comma
+  $arguments_string = rtrim($arguments_string, ",");
+  // Replace spaces with '+'
+  $arguments_string = preg_replace('/ /', '+', $arguments_string);
 
   return $arguments_string;
 }
@@ -110,4 +123,34 @@ function _digitalmeasures_xml_to_array($xml_string) {
   $array = drupal_json_decode($json);
 
   return $array;
+}
+
+/**
+ * Helper function to convert a string of arguments into a nested array.
+ *
+ * $arguments_string  A comma separated list of indexkeys and entry keys,
+ *                    separated by a colon.
+ *                    Example:
+ *                    USERNAME:mgp140,USERNAME:kpf107,CAMPUS_NAME=Berks
+ *
+ * @return array(
+ *           USERNAME => array('mgp140','kpf107'),
+ *           CAMPUS_NAME => array('Berks'),
+ *         );
+ */
+function _digitalmeasures_arguments_string_to_array($arguments_string) {
+  $arguments_array = array();
+  $arguments = explode(',', $arguments_string);
+
+  // Convert the list of arguments into a nested array of index keys and entry keys.
+  foreach ($arguments as $argument) {
+    $argument_array = explode(':', $argument);
+    $index_key = $argument_array[0];
+    $entry_key = $argument_array[1];
+
+    $arguments_array[$index_key][] = $entry_key;
+  }
+
+  return $arguments_array;
+
 }
