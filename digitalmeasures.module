@@ -1,6 +1,6 @@
 <?php
 
-define('DIGITALMEASURES_BASE_URL', 'https://www.digitalmeasures.com');
+define('DIGITALMEASURES_BASE_URL', 'https://beta.digitalmeasures.com');
 
 /**
  * Implements hook_menu().
