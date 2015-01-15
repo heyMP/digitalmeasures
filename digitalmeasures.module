@@ -42,9 +42,11 @@ function digitalmeasures_permission() {
  * $output       Choose how your reponse data is rendered. Supports 'php' or 'xml'.
  */
 function digitalmeasures_digitalmeasures_get_schemadata($arguments = array(), $output = 'php') {
+  // Define Resource ID
   $resource_id = 'login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University';
+  // Connect to Digital Measures
   $response = _digitalmeasures_connect($resource_id, $arguments);
-
+  // Output the data as php array
   return _digital_measures_render_response_data($response, $output);
 }
 
@@ -110,7 +112,7 @@ function _digitalmeasures_argument_array_to_string($arguments) {
 }
 
 /**
- * Helper function to handle how the request data is rendered
+ * Helper function to handle how the request data is rendered.
  */
 function _digital_measures_render_response_data($response, $output) {
   // If php is selected then convert the request from xml object to php array.
