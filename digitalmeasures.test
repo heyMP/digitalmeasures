@@ -25,15 +25,22 @@ class DigitalMeasuresTestCase extends DrupalWebTestCase {
     variable_set('digitalmeasures_password', 'test');
   }
 
-  public function testGet() {
+  /**
+   * Test that if we want to search for users mgp140 and btopro as well as
+   * the UP campus, the final http request will have the the correct GET url.
+   */
+  public function testGetSchemaData() {
     $arguments = array(
       'USERNAME' => array('mgp140','btopro'),
       'CAMPUS' => array('UP')
     );
+    // Call the get schemadata function. Choose to use the xml format.
     $request = digitalmeasures_digitalmeasures_get_schemadata($arguments, 'xml');
+    // Get the request from the returned xml object.
     $request_get = $request->request;
     preg_match('#GET /login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:mgp140,USERNAME:btopro,CAMPUS:UP#', $request_get, $matches);
 
+    // If the expected url was a match in the http request then it worked.
     $this->assertTrue(isset($matches[0]));
   }
 }
