@@ -30,7 +30,7 @@ function digitalmeasures_drush_command() {
 }
 
 /**
- * digitalmeasures retrieve user profile command.
+ * Drush retrieve user profile callback.
  */
 function drush_digitalmeasures_get_schemadata($arguments) {
   // Convert the arguments string into a nested array
@@ -39,6 +39,9 @@ function drush_digitalmeasures_get_schemadata($arguments) {
   digitalmeasures_digitalmeasures_get_schemadata($arguments_array);
 }
 
+/**
+ * Drush get all indexes callback.
+ */
 function drush_digitalmeasures_get_indexes() {
   digitalmeasures_digitalmeasures_get_all_indexes();
 }

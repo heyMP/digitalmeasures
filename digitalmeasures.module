@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @file
+ * Defines permissions and connection information for retreiving data from a
+ * Digital Measures account.
+ */
+
 define('DIGITALMEASURES_BASE_URL', 'https://beta.digitalmeasures.com');
 
 /**

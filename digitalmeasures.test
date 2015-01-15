@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * @file
+ * Defines simple tests to test functionality of the Digital Measures module.
+ */
+
 /**
  * Creates a test email entry in the Listserv_Verify Table and verifies that the
  * keys are correctly active and inactive.
@@ -10,13 +16,16 @@ class DigitalMeasuresTestCase extends DrupalWebTestCase {
    * Implements getInfo().
    */
   public static function getInfo() {
-    return array (
+    return array(
       'name' => t('Digital Measures'),
       'description' => t('Functional test for the Digital Measures module.'),
       'group' => t('Digital Measures'),
     );
   }
 
+  /**
+   * Impliments setUp().
+   */
   public function setUp() {
     // Enable any module that you will need in your tests.
     parent::setUp('digitalmeasures');
@@ -31,7 +40,7 @@ class DigitalMeasuresTestCase extends DrupalWebTestCase {
    */
   public function testGetSchemaData() {
     $arguments = array(
-      'USERNAME' => array('mgp140','btopro'),
+      'USERNAME' => array('mgp140', 'btopro'),
       'CAMPUS' => array('UP')
     );
     // Call the get schemadata function. Choose to use the xml format.
