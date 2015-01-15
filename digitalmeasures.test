@@ -6,7 +6,6 @@
  * @todo Need create a test for checking the confirmation link was posted.
  */
 class DigitalMeasuresTestCase extends DrupalWebTestCase {
-
   /**
    * Implements getInfo().
    */
@@ -27,18 +26,15 @@ class DigitalMeasuresTestCase extends DrupalWebTestCase {
   }
 
   public function testGet() {
-    $expected_response = 'GET /login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:mgp140,USERNAME:btopro,CAMPUS:UP HTTP/1.0
-      Authorization: Basic dGVzdDp0ZXN0
-      User-Agent: simpletest971541;1421275186;54b6f032214401.96414165;ncRMdDW-nRPuo9jxoAfOf7qkeRKP_LJKXrBonSMgwTw
-      Host: beta.digitalmeasures.com';
     $arguments = array(
       'USERNAME' => array('mgp140','btopro'),
       'CAMPUS' => array('UP')
     );
     $request = digitalmeasures_digitalmeasures_get_schemadata($arguments, 'xml');
-    drush_print_r($request->request);
+    $request_get = $request->request;
+    preg_match('#GET /login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:mgp140,USERNAME:btopro,CAMPUS:UP#', $request_get, $matches);
 
-    $this->assertEqual($request->request, $expected_response);
+    $this->assertTrue(isset($matches[0]));
   }
 }
 
