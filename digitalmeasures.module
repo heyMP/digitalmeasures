@@ -39,19 +39,13 @@ function digitalmeasures_permission() {
  *                          'USERNAME' => 'mgp140',
  *                          'CAMPUS' => 'University Park'
  *                        );
+ * $output       Choose how your reponse data is rendered. Supports 'php' or 'xml'.
  */
 function digitalmeasures_digitalmeasures_get_schemadata($arguments = array(), $output = 'php') {
   $resource_id = 'login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University';
   $response = _digitalmeasures_connect($resource_id, $arguments);
-  if ($output == 'php') {
-    $response = _digitalmeasures_xml_to_array($response->data);
-  }
 
-  drush_print_r($response);
-  if (module_exists('devel_debug_log')) {
-    ddl($response);
-  }
-  return $response;
+  return _digital_measures_render_response_data($response, $output);
 }
 
 /**
@@ -60,15 +54,8 @@ function digitalmeasures_digitalmeasures_get_schemadata($arguments = array(), $o
 function digitalmeasures_digitalmeasures_get_all_indexes($output = 'php') {
   $resource_id = 'login/service/v4/SchemaIndex/INDIVIDUAL-ACTIVITIES-University';
   $response = _digitalmeasures_connect($resource_id, $arguments);
-  if ($output == 'php') {
-    $response = _digitalmeasures_xml_to_array($response->data);
-  }
 
-  drush_print_r($response);
-  if (module_exists('devel_debug_log')) {
-    ddl($response);
-  }
-  return $response;
+  return _digital_measures_render_response_data($response, $output);
 }
 
 /**
@@ -121,6 +108,33 @@ function _digitalmeasures_argument_array_to_string($arguments) {
 
   return $arguments_string;
 }
+
+/**
+ * Helper function to handle how the request data is rendered
+ */
+function _digital_measures_render_response_data($response, $output) {
+  // If php is selected then convert the request from xml object to php array.
+  if ($output == 'php') {
+    $response = _digitalmeasures_xml_to_array($response->data);
+  }
+
+  drush_print_r($response);
+  if (module_exists('devel_debug_log')) {
+    ddl($response);
+  }
+  return $response;
+}
+
+// If php is selected then convert the request from xml object to php array.
+  if ($output == 'php') {
+    $response = _digitalmeasures_xml_to_array($response->data);
+  }
+
+  drush_print_r($response);
+  if (module_exists('devel_debug_log')) {
+    ddl($response);
+  }
+  return $response;
 
 /**
  * Helper function to convert an xml string to php array.
