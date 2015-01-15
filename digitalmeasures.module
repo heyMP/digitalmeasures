@@ -30,14 +30,14 @@ function digitalmeasures_permission() {
 }
 
 /**
- * Public function to retrieve user profile information from Digital Measures.
+ * Public function to retrieve schema data from Digital Measures.
  *
  * $arguments    An array of index keys to search on where the key of array is
  *               the 'indexKey' and the value is the 'entryKey' that you want
  *               to search on.
  *               Example: array(
- *                          'USERNAME' => 'mgp140',
- *                          'CAMPUS' => 'University Park'
+ *                          'USERNAME' => array('mgp140', 'btopro'),
+ *                          'CAMPUS_NAME' => array('University Park'),
  *                        );
  * $output       Choose how your reponse data is rendered. Supports 'php' or 'xml'.
  */
