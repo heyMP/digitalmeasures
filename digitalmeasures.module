@@ -30,16 +30,7 @@ function digitalmeasures_permission() {
 }
 
 /**
- * Public function to retrieve schema data from Digital Measures.
- *
- * $arguments    An array of index keys to search on where the key of array is
- *               the 'indexKey' and the value is the 'entryKey' that you want
- *               to search on.
- *               Example: array(
- *                          'USERNAME' => array('mgp140', 'btopro'),
- *                          'CAMPUS_NAME' => array('University Park'),
- *                        );
- * $output       Choose how your reponse data is rendered. Supports 'php' or 'xml'.
+ * Impliments hook_digitalmeasures_get_schemadata
  */
 function digitalmeasures_digitalmeasures_get_schemadata($arguments = array(), $output = 'php') {
   // Define Resource ID
@@ -51,7 +42,7 @@ function digitalmeasures_digitalmeasures_get_schemadata($arguments = array(), $o
 }
 
 /**
- * Public function to retrieve a list of all indexes and entries.
+ * Impliments hook_digitalmeasures_get_all_indexes
  */
 function digitalmeasures_digitalmeasures_get_all_indexes($output = 'php') {
   $resource_id = 'login/service/v4/SchemaIndex/INDIVIDUAL-ACTIVITIES-University';
