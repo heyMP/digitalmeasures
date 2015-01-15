@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/heyMP/digitalmeasures.svg?branch=master)](https://travis-ci.org/heyMP/digitalmeasures)
+
 # Digital Measures API
 
 This is a Drupal module will act as an API to request data from the [Digital Measures](http://www.digitalmeasures.com/) platform.
