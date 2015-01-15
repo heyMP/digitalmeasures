@@ -125,17 +125,6 @@ function _digital_measures_render_response_data($response, $output) {
   return $response;
 }
 
-// If php is selected then convert the request from xml object to php array.
-  if ($output == 'php') {
-    $response = _digitalmeasures_xml_to_array($response->data);
-  }
-
-  drush_print_r($response);
-  if (module_exists('devel_debug_log')) {
-    ddl($response);
-  }
-  return $response;
-
 /**
  * Helper function to convert an xml string to php array.
  */
