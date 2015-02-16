@@ -36,12 +36,22 @@ function drush_digitalmeasures_get_schemadata($arguments) {
   // Convert the arguments string into a nested array
   $arguments_array = _digitalmeasures_arguments_string_to_array($arguments);
   // Make request to Digital Measures
-  digitalmeasures_digitalmeasures_get_schemadata($arguments_array);
+  $response = digitalmeasures_digitalmeasures_get_schemadata($arguments_array);
+
+  drush_print_r($response);
+  if (module_exists('devel_debug_log')) {
+    ddl($response);
+  }
 }
 
 /**
  * Drush get all indexes callback.
  */
 function drush_digitalmeasures_get_indexes() {
-  digitalmeasures_digitalmeasures_get_all_indexes();
+  $response = digitalmeasures_digitalmeasures_get_all_indexes();
+
+  drush_print_r($response);
+  if (module_exists('devel_debug_log')) {
+    ddl($response);
+  }
 }

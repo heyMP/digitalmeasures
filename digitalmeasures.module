@@ -117,10 +117,6 @@ function _digital_measures_render_response_data($response, $output) {
     $response = _digitalmeasures_xml_to_array($response->data);
   }
 
-  drush_print_r($response);
-  if (module_exists('devel_debug_log')) {
-    ddl($response);
-  }
   return $response;
 }
 
