@@ -48,9 +48,9 @@ function digitalmeasures_digitalmeasures_get_schemadata($arguments = array(), $o
 }
 
 /**
- * Impliments hook_digitalmeasures_get_all_indexes
+ * Impliments hook_digitalmeasures_get_indexes
  */
-function digitalmeasures_digitalmeasures_get_all_indexes($output = 'php') {
+function digitalmeasures_digitalmeasures_get_indexes($arguments = array(), $output = 'php') {
   $resource_id = 'login/service/v4/SchemaIndex/INDIVIDUAL-ACTIVITIES-University';
   $response = _digitalmeasures_connect($resource_id, $arguments);
 
@@ -95,11 +95,27 @@ function _digitalmeasures_connect($resource_id = '', $arguments = array(), $opti
 function _digitalmeasures_argument_array_to_string($arguments) {
   // Add the IndexEntryKey in front of the IndexKeyEntryKey in the array
   $arguments_string = '';
-  foreach ($arguments as $index_entry_key => $argument_array) {
-    foreach ($argument_array as $key => $index_key_entry_key) {
-      $arguments_string .= $index_entry_key . ':' . $index_key_entry_key . ',';
+
+  if (is_array($arguments)) {
+    foreach ($arguments as $index_entry_key => $index_entry_key_arguments) {
+      // If the Entry Key has a nested array of arguments
+      if (isset($index_entry_key_arguments[0])) {
+        foreach ($index_entry_key_arguments as $index_key_entry_key) {
+          $arguments_string .= $index_entry_key . ':' . $index_key_entry_key . ',';
+        }
+      }
+      else {
+        $arguments_string .= $index_entry_key . ',';
+      }
     }
   }
+  elseif (is_string($arguments)) {
+    $arguments_string = $arguments;
+  }
+  else {
+    watchdog('digitalmeasures', t('Argument is neither an array or string.'), 'WATCHDOG_ERROR');
+  }
+
   // Remove trailing comma
   $arguments_string = rtrim($arguments_string, ",");
   // Replace spaces with '+'
@@ -154,7 +170,10 @@ function _digitalmeasures_arguments_string_to_array($arguments_string) {
     $index_key = $argument_array[0];
     $entry_key = $argument_array[1];
 
-    $arguments_array[$index_key][] = $entry_key;
+    $arguments_array[$index_key] = array();
+    if (isset($entry_key)) {
+      $arguments_array[$index_key][] = $entry_key;
+    }
   }
 
   return $arguments_array;

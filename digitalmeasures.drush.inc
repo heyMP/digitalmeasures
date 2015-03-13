@@ -24,6 +24,9 @@ function digitalmeasures_drush_command() {
   $items['get-indexes'] = array(
     'description' => 'Retrieve retrieve a list of all indexes and entries.',
     'aliases' => array('dmindexes'),
+    'arguments' => array(
+      'search-data' => 'A comma separated list of indexkeys that you would like to search on.',
+    ),
   );
 
   return $items;
@@ -47,8 +50,8 @@ function drush_digitalmeasures_get_schemadata($arguments) {
 /**
  * Drush get all indexes callback.
  */
-function drush_digitalmeasures_get_indexes() {
-  $response = digitalmeasures_digitalmeasures_get_all_indexes();
+function drush_digitalmeasures_get_indexes($arguments) {
+  $response = digitalmeasures_digitalmeasures_get_indexes($arguments);
 
   drush_print_r($response);
   if (module_exists('devel_debug_log')) {
