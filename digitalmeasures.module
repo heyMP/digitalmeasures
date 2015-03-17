@@ -57,6 +57,12 @@ function digitalmeasures_digitalmeasures_get_indexes($arguments = array(), $outp
   return _digital_measures_render_response_data($response, $output);
 }
 
+function digitalmeasures_digitalmeasures_entry_keys_from_index($arguments = array(), $output = 'php') {
+  $response = digitalmeasures_digitalmeasures_get_indexes($arguments, $output);
+
+  return _digitalmeasures_format_index_entry_keys($response, $output);
+}
+
 /**
  * Helper function for connecting to Digital Measures via the drupal_http_request().
  * $arguments:    An array of options that are keyed by optional SchemaKey and
@@ -76,6 +82,8 @@ function _digitalmeasures_connect($resource_id = '', $arguments = array(), $opti
 
   // Add the correct base_url
   $url = $base_url . '/' . $resource_id . '/' . $arguments;
+
+  drush_print_r($url);
 
   // Attempt to connect to Digital Measures
   if ($base_url && $username && $password) {
@@ -177,5 +185,34 @@ function _digitalmeasures_arguments_string_to_array($arguments_string) {
   }
 
   return $arguments_array;
+}
 
+/**
+ * Helper function to convert Digital Measure index entries to a formatted associative array.
+ */
+function _digitalmeasures_format_index_entry_keys($response, $output = 'php') {
+  if ($output == 'php') {
+    $formatted_response = array();
+
+    // Find out if there are multiple entry keys
+    if (isset($response['Index'][0])) {
+      foreach ($response['Index'] as $key => $index) {
+        foreach ($index['IndexEntry'] as $key => $entry) {
+          $index_key = $index['@attributes']['indexKey'];
+          $formatted_response[$index_key][] = $entry['@attributes']['entryKey'];
+        }
+      }
+    }
+    else {
+      foreach ($response['Index']['IndexEntry'] as $key => $entry) {
+        $index_key = $response['Index']['@attributes']['indexKey'];
+        $formatted_response[$index_key][] = $entry['@attributes']['entryKey'];
+      }
+    }
+  }
+  else {
+    watchdog('digitalmeasures', t('Output type is not supported in this function.'), 'WATCHDOG_ERROR');
+  }
+
+  return $formatted_response;
 }
