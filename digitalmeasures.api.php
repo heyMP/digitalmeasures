@@ -40,7 +40,7 @@ function hook_digitalmeasures_get_schemadata($arguments = array(), $output = 'ph
  *   - php
  *   - xml
  */
-function hook_digitalmeasures_get_all_indexes($output = 'php') {
+function hook_digitalmeasures_get_indexes($arguments = array(), $output = 'php') {
   $resource_id = 'login/service/v4/SchemaIndex/INDIVIDUAL-ACTIVITIES-University';
   $response = _digitalmeasures_connect($resource_id, $arguments);
 

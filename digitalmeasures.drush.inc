@@ -22,8 +22,18 @@ function digitalmeasures_drush_command() {
     ),
   );
   $items['get-indexes'] = array(
-    'description' => 'Retrieve retrieve a list of all indexes and entries.',
+    'description' => 'Retrieve a list of all indexes and entries.',
     'aliases' => array('dmindexes'),
+    'arguments' => array(
+      'search-data' => 'A comma separated list of indexkeys that you would like to search on.',
+    ),
+  );
+  $items['get-entry-keys'] = array(
+    'description' => 'Retrieve a list of entry keys available from specified indexes.',
+    'aliases' => array('dmentrykeys'),
+    'arguments' => array(
+      'search-data' => 'A comma separated list of indexkeys whos entry keys you would like to recieve.',
+    ),
   );
 
   return $items;
@@ -38,7 +48,6 @@ function drush_digitalmeasures_get_schemadata($arguments) {
   // Make request to Digital Measures
   $response = digitalmeasures_digitalmeasures_get_schemadata($arguments_array);
 
-  drush_print_r($response);
   if (module_exists('devel_debug_log')) {
     ddl($response);
   }
@@ -47,8 +56,20 @@ function drush_digitalmeasures_get_schemadata($arguments) {
 /**
  * Drush get all indexes callback.
  */
-function drush_digitalmeasures_get_indexes() {
-  $response = digitalmeasures_digitalmeasures_get_all_indexes();
+function drush_digitalmeasures_get_indexes($arguments) {
+  $response = digitalmeasures_digitalmeasures_get_indexes($arguments);
+
+  drush_print_r($response);
+  if (module_exists('devel_debug_log')) {
+    ddl($response);
+  }
+}
+
+/**
+ * Drush get all entry keys callback.
+ */
+function drush_digitalmeasures_get_entry_keys($arguments) {
+  $response = digitalmeasures_digitalmeasures_entry_keys_from_index($arguments);
 
   drush_print_r($response);
   if (module_exists('devel_debug_log')) {
