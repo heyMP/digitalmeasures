@@ -14,7 +14,7 @@ define('DIGITALMEASURES_BASE_URL', 'https://beta.digitalmeasures.com');
 function digitalmeasures_menu() {
   $items['admin/config/services/digitalmeasures'] = array(
     'title' => 'Digital Measures Configuration',
-    'access arguments' => array('admininster digital measures'),
+    'access arguments' => array('administer digital measures'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('digitalmeasures_admin_config_form'),
     'file' => 'digitalmeasures.admin.inc',
